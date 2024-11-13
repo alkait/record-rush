@@ -57,27 +57,30 @@ class Stopwatch {
         this.initializeEventListeners();
         // Add keyboard controls
         document.addEventListener('keydown', (e) => {
-            // Check if options dialog is open
-            if (this.optionsDialog.classList.contains('active')) {
-                return; // Exit early if options dialog is open
-            }
+            // Ignore keystrokes when typing in input fields
+            if (e.target.tagName === 'INPUT') return;
 
-            // Check if the pressed key is spacebar and not inside an input field
-            if (e.code === 'Space' && e.target.tagName !== 'INPUT') {
-                e.preventDefault(); // Prevent page scrolling
-                if (this.isRunning) {
-                    this.stop();
-                } else {
-                    this.start();
-                }
-            }
-            // Add "r" key shortcut for deleting record
-            if (e.code === 'KeyR' && !this.isRunning && this.bestTime !== null) {
-                this.resetRecord();
-            }
-            // Add "o" key shortcut for opening options
-            if (e.code === 'KeyO' && !this.isRunning && e.target.tagName !== 'INPUT') {
-                this.optionsDialog.classList.add('active');
+            switch (e.key.toLowerCase()) {
+                case ' ':
+                    e.preventDefault();
+                    this.toggleBtn.click();
+                    break;
+                case 'r':
+                    if (!this.isRunning) {
+                        this.deleteBtn.click();
+                    }
+                    break;
+                case 'o':
+                    this.optionsBtn.click();
+                    break;
+                case '/':
+                    e.preventDefault();
+                    this.showShortcutsDialog();
+                    break;
+                case 'm': // Add mute shortcut
+                    e.preventDefault();
+                    this.muteBtn.click();
+                    break;
             }
         });
 

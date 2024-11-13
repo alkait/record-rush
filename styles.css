@@ -1181,6 +1181,9 @@ html, body {
 }
 
 .mute-button {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
     background-color: transparent;
     border: 2px solid #888;
     color: #888;
@@ -1192,6 +1195,7 @@ html, body {
     justify-content: center;
     width: 40px;
     height: 40px;
+    z-index: 1002;
 }
 
 .mute-button:hover {
@@ -1219,8 +1223,21 @@ html, body {
 /* Mobile adjustments */
 @media (max-width: 768px) {
     .mute-button {
+        top: 0.5rem;
+        right: 0.5rem;
         width: 35px;
         height: 35px;
         padding: 6px;
+    }
+}
+
+/* Adjust position when banner is visible */
+.challenge-banner:not([style*="display: none"]) ~ .mute-button {
+    top: calc(50px + 1rem);
+}
+
+@media (max-width: 768px) {
+    .challenge-banner:not([style*="display: none"]) ~ .mute-button {
+        top: calc(50px + 0.5rem);
     }
 }
