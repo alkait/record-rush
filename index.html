@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- SEO Meta Tags -->
+    <title>Record Rush! - Challenge your limits, one record at a time</title>
+    <meta name="description" content="Challenge yourself with Record Rush - a sleek stopwatch that helps you break your personal records. Or even better, play with friends!">
+    <meta name="keywords" content="stopwatch, timer, record breaking, personal records, time tracker, challenge timer">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://record-rush.com/">
+    <meta property="og:title" content="Record Rush! - Challenge your limits, one record at a time">
+    <meta property="og:description" content="Challenge yourself and your friends with Record Rush - a sleek stopwatch game that helps you break your personal records.">
+    <meta property="og:image" content="https://record-rush.com/og-image.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://record-rush.com/">
+    <meta property="twitter:title" content="Record Rush! - Personal Record Breaking Timer">
+    <meta property="twitter:description" content="Challenge yourself with Record Rush - a sleek stopwatch app that helps you break your personal records.">
+    <meta property="twitter:image" content="https://record-rush.com/og-image.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="mask-icon" href="safari-pinned-tab.svg" color="#4CAF50">
+    <meta name="msapplication-TileColor" content="#4CAF50">
+    <meta name="theme-color" content="#4CAF50">
+    
+    <link rel="stylesheet" href="styles.css?v=1.0">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Record Rush!",
+      "description": "A sleek stopwatch app that helps you break your personal records with sound effects and visual feedback.",
+      "url": "https://record-rush.com/",
+      "applicationCategory": "UtilityApplication",
+      "operatingSystem": "Any",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "featureList": [
+        "Personal record tracking",
+        "Sound effects",
+        "Visual feedback",
+        "Keyboard shortcuts",
+        "Mobile friendly"
+      ]
+    }
+    </script>
+</head>
+<body>
+    <div class="record-break-effect"></div>
+    <div class="record-not-broken-effect"></div>
+    <div class="challenge-banner">
+        <div class="challenge-text"></div>
+    </div>
+    <div class="container">
+        <div class="loading-overlay">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Loading...</div>
+        </div>
+        <div class="stopwatch">
+            <div class="record-container">
+                <div class="record">
+                    <div class="record-label">The record to beat</div>
+                    <div class="avatar"></div>
+                    <span class="record-text">No record set</span>
+                    <button id="deleteBtn" class="icon-button" title="Reset Record">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="display">00:00.00</div>
+            
+            <div class="controls">
+                <div class="next-player" style="display: none;">
+                    <span class="next-player-phrase"></span> <span class="next-player-initial"></span>...
+                </div>
+                <button id="toggleBtn">start</button>
+                <div class="spacebar-hint">Press SPACEBAR to start/stop</div>
+                <div class="bottom-controls">
+                    <button id="muteBtn" class="mute-button" title="Toggle sound">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+                            <path class="sound-wave" d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                        </svg>
+                    </button>
+                    <button id="optionsBtn" class="options-button">options</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Update the options dialog -->
+    <div id="optionsDialog" class="options-dialog">
+        <div class="options-content">
+            <h2>Options</h2>
+            <button id="closeOptionsBtn">×</button>
+            
+            <!-- Player initials section -->
+            <div class="players-section">
+                <h3>Players</h3>
+                <div class="input-group main-player">
+                    <label for="playerInitials">main player initials</label>
+                    <input 
+                        type="text" 
+                        id="playerInitials" 
+                        maxlength="2" 
+                        pattern="[A-Z]{1,2}"
+                        placeholder="A"
+                        title="Enter 1-2 capital letters"
+                        style="text-transform: uppercase;"
+                    >
+                </div>
+                
+                <div class="additional-players">
+                    <!-- Additional players will be added here dynamically -->
+                </div>
+
+                <button id="addPlayerBtn" class="add-player-button">
+                    <svg class="plus-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14M5 12h14"/>
+                    </svg>
+                    add Player
+                </button>
+            </div>
+
+            <div class="radio-group">
+                <label>
+                    <input type="radio" name="recordType" value="longer" checked>
+                    higher time wins (endurance challenges)
+                </label>
+                <label>
+                    <input type="radio" name="recordType" value="shorter">
+                    lower time wins (speed challenges)
+                </label>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Keyboard Shortcuts Dialog -->
+    <div id="shortcutsDialog" class="shortcuts-dialog">
+        <div class="shortcuts-content">
+            <h2>Keyboard Shortcuts</h2>
+            <button id="closeShortcutsBtn">×</button>
+            
+            <div class="shortcuts-list">
+                <div class="shortcut-item">
+                    <kbd>SPACE</kbd>
+                    <span>Start/Stop timer</span>
+                </div>
+                <div class="shortcut-item">
+                    <kbd>R</kbd>
+                    <span>Reset record</span>
+                </div>
+                <div class="shortcut-item">
+                    <kbd>O</kbd>
+                    <span>Open options</span>
+                </div>
+                <div class="shortcut-item">
+                    <kbd>/</kbd>
+                    <span>Show this dialog</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add About Dialog -->
+    <div id="aboutDialog" class="about-dialog">
+        <div class="about-content">
+            <h2>About Record Rush</h2>
+            <button id="closeAboutBtn">×</button>
+            
+            <div class="about-text">
+                <p>Welcome to Record Rush - an experiment where I challenged AI to create a fully working game without writing a single line of code myself! 🤖✨</p>
+                
+                <p>Through 4 hours of intense arguments with AI, I've built a game featuring slick UI design, state management, sound effects, multiplayer support, data persistence, production deployment, SEO optimization, and responsive design. 🚀</p>
+                
+                <p>While a stopwatch might seem simple, this experiment demonstrates how AI can supercharge development by shifting focus from writing code to mastering prompt engineering. It's like pair programming, but your partner never needs coffee breaks! ☕</p>
+
+                <p>So go ahead - break some records and challenge your friends! 🏆</p>
+
+                <p>Made by <a href="https://x.com/alkait" target="_blank" id="twitterLink">alkait</a> • <a href="https://github.com/alkait/record-rush" target="_blank" id="githubLink">github</a></p>
+                <p>Created in 2024.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Footer with just the fist emoji -->
+    <footer class="footer">
+        <p>👊 Made by bullying AI for 4 hours, <a href="#" id="readMoreLink">harassment report...</a></p>
+    </footer>
+
+    <script src="script.js?v=1.0"></script>
+</body>
+</html> 
